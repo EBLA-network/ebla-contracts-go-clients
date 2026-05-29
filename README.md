@@ -1,12 +1,14 @@
-# taraxa-contracts-go-clients
-Taraxa contracts go clients
+# ebla-contracts-go-clients
+
+Go client and generated bindings for EBLA's on-chain contracts. Currently it
+covers the **DPoS** precompile (`clients/ebla/dpos_contract_client`) plus a
+generic RPC client and net config. It builds against upstream
+`github.com/ethereum/go-ethereum` (no fork required). EBLA has no Ethereum
+bridge, so no bridge/eth clients are included.
 
 # Usage
-```
-```
 
-See demo.go for more examples
-
+See `clients/ebla/demo/demo.go` for an example.
 
 #### Prerequisites
 ##### solc
@@ -24,50 +26,14 @@ make
 make devtools
 ```
 
-## !!! To work with latest contracts interfaces
-### taraxa-evm
-Update taraxa-evm submodule by running:
-```
-git submodule update submodules/taraxa-evm
-```
+## Regenerating the DPoS interface from EBLA contracts
 
-or update all submodules:
+The DPoS contract source lives in the `ebla-evm` repo. Add it as a submodule
+under `submodules/ebla-evm` (or point the paths below at a local checkout),
+then regenerate the ABI + Go bindings:
 
 ```
-git submodule update --init --recursive
-```
+solc --abi --overwrite --optimize submodules/ebla-evm/ebla/state/contracts/dpos/solidity/dpos_contract_interface.sol --output-dir clients/ebla/dpos_contract_client/dpos_interface/
 
-Generate abi & client:
-```
-solc --abi --overwrite --optimize submodules/taraxa-evm/taraxa/state/contracts/dpos/solidity/dpos_contract_interface.sol --output-dir clients/tara/dpos_contract_client/dpos_interface/
-
-abigen --abi=clients/tara/dpos_contract_client/dpos_interface/DposInterface.abi --pkg=dpos_interface --out=clients/tara/dpos_contract_client/dpos_interface/dpos_interface.go
-```
-
-### bridge
-Update bridge submodule by running:
-```
-git submodule update submodules/bridge
-```
-
-or update all submodules:
-
-```
-git submodule update --init --recursive
-cd submodules/bridge
-git submodule update --init --recursive
-```
-
-Generate abi & client:
-```
-solc --abi --overwrite --optimize --base-path .  --include-path submodules/bridge/lib/ submodules/bridge/src/eth/TaraClient.sol --output-dir clients/eth/tara_client_contract_client/contract_interface/
-
-abigen --abi=clients/eth/tara_client_contract_client/contract_interface/TaraClient.abi --pkg=tara_client_contract_interface --out=clients/eth/tara_client_contract_client/contract_interface/tara_client_contract_interface.go
-abigen --abi=clients/eth/tara_client_contract_client/contract_interface/PillarBlock.abi --pkg=pillar_block_interface --out=clients/eth/tara_client_contract_client/contract_interface/pillar_block/pillar_block_interface.go
-
-
-solc --abi --overwrite --optimize --base-path .  --include-path submodules/bridge/lib/ @openzeppelin=submodules/bridge/lib/openzeppelin-contracts submodules/bridge/src/lib/BridgeBase.sol --output-dir clients/bridge_contract_client/contract_interface/
-
-abigen --abi=clients/bridge_contract_client/contract_interface/BridgeBase.abi --pkg=bridge_contract_interface --out=clients/bridge_contract_client/contract_interface/bridge_contract_interface.go
-
+abigen --abi=clients/ebla/dpos_contract_client/dpos_interface/DposInterface.abi --pkg=dpos_interface --out=clients/ebla/dpos_contract_client/dpos_interface/dpos_interface.go
 ```
