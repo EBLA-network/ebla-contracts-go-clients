@@ -175,22 +175,22 @@ func (DposContractClient *DposContractClient) Undelegate(transactor *client_base
 	return DposContractClient.dposInterface.Undelegate(transactOpts, validator, amount)
 }
 
-func (DposContractClient *DposContractClient) ConfirmUndelegate(transactor *client_base.Transactor, validator common.Address) (*types.Transaction, error) {
+func (DposContractClient *DposContractClient) ConfirmUndelegate(transactor *client_base.Transactor, validator common.Address, undelegationId uint64) (*types.Transaction, error) {
 	transactOpts, err := DposContractClient.CreateNewTransactOpts(transactor)
 	if err != nil {
 		return nil, err
 	}
 
-	return DposContractClient.dposInterface.ConfirmUndelegate(transactOpts, validator)
+	return DposContractClient.dposInterface.ConfirmUndelegate(transactOpts, validator, undelegationId)
 }
 
-func (DposContractClient *DposContractClient) CancelUndelegate(transactor *client_base.Transactor, validator common.Address) (*types.Transaction, error) {
+func (DposContractClient *DposContractClient) CancelUndelegate(transactor *client_base.Transactor, validator common.Address, undelegationId uint64) (*types.Transaction, error) {
 	transactOpts, err := DposContractClient.CreateNewTransactOpts(transactor)
 	if err != nil {
 		return nil, err
 	}
 
-	return DposContractClient.dposInterface.CancelUndelegate(transactOpts, validator)
+	return DposContractClient.dposInterface.CancelUndelegate(transactOpts, validator, undelegationId)
 }
 
 func (DposContractClient *DposContractClient) RedelegateUndelegate(transactor *client_base.Transactor, amount *big.Int, validatorFrom common.Address, validatorTo common.Address) (*types.Transaction, error) {
